@@ -10,7 +10,9 @@ class SavePage(QtWidgets.QWidget):
         QtWidgets.QWidget.__init__(self, parent, QtCore.Qt.Window)
         self.parent = parent
 
-        label = QtWidgets.QLabel('Save Page', self)
+        self.setWindowTitle('Password Keeper')
+
+        label = QtWidgets.QLabel('add new source', self)
         label.setAlignment(QtCore.Qt.AlignCenter)
 
         # main layout
@@ -22,7 +24,7 @@ class SavePage(QtWidgets.QWidget):
             lab = QtWidgets.QLabel(field, self)  # smart
             ent = QtWidgets.QLineEdit(self)  # pretty
 
-            ent.setWidth(300)
+            ent.setFixedWidth(300)
 
             hbox = QtWidgets.QHBoxLayout()
             hbox.addWidget(lab)

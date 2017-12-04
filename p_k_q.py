@@ -20,7 +20,7 @@ class StackedWindow(QtWidgets.QWidget):
         #self.setWindowIcon(QtWidgets.QIcon('favicon.ico'))
         #self.resize(600, 500)
 
-        label = QtWidgets.QLabel('Load Page', self)
+        label = QtWidgets.QLabel('Source List', self)
         label.setAlignment(QtCore.Qt.AlignCenter)
 
         # main layout
