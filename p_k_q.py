@@ -65,7 +65,6 @@ class StackedWindow(QtWidgets.QWidget):
         self.show()
 
     def add_window(self):
-        print("hello")
         modal = SavePage(self.main_page)
 
     def load_function(self):
@@ -86,23 +85,24 @@ class StackedWindow(QtWidgets.QWidget):
         try:
             db = shelve.open('shelvefile_new')
             record = db[self.source]
+
+            for i, field in enumerate(fieldnames):  # enumerate returns (index, value) tuple
+                lab = QtWidgets.QLabel(field, self)  # smart
+                ent = QtWidgets.QLineEdit(self)  # pretty
+
+                hbox = QtWidgets.QHBoxLayout()
+                hbox.addWidget(lab)
+                hbox.addWidget(ent)
+                main_layout.addLayout(hbox)
+
+                holder[field] = ent
+                holder[field].clear()
+                holder[field].setText(record[field])
+            modalWindow.show()
         except:
             traceback.print_exc()
-
-
-        for i, field in enumerate(fieldnames):  # enumerate returns (index, value) tuple
-            lab = QtWidgets.QLabel(field, self)  # smart
-            ent = QtWidgets.QLineEdit(self)  # pretty
-
-            hbox = QtWidgets.QHBoxLayout()
-            hbox.addWidget(lab)
-            hbox.addWidget(ent)
-            main_layout.addLayout(hbox)
-
-            holder[field] = ent
-            holder[field].clear()
-            holder[field].setText(record[field])
-        modalWindow.show()
+            QtWidgets.QMessageBox.information(self, 'Information',
+                                          'Problem with selected key')       
 
     def refresh_function(self):
         try:
@@ -117,10 +117,14 @@ class StackedWindow(QtWidgets.QWidget):
         self.source = self.index.data(0)
         print(self.source, info)
         with shelve.open('shelvefile_new') as db:
-            clipboard = QtWidgets.QApplication.clipboard()
-            clipboard.setText(db[self.source][info])
-            QtWidgets.QMessageBox.information(self, 'Information',
-                                          '{} of {} has been added to clipboard'.format(info, self.source))
+            try:
+                clipboard = QtWidgets.QApplication.clipboard()
+                clipboard.setText(db[self.source][info])
+                QtWidgets.QMessageBox.information(self, 'Information',
+                                            '{} of {} has been added to clipboard'.format(info, self.source))
+            except AttributeError:
+                QtWidgets.QMessageBox.information(self, 'Information',
+                                          'Problem with selected key')
 
     def delete_function(self):
         self.index = self.source_list.currentIndex()
@@ -131,9 +135,13 @@ class StackedWindow(QtWidgets.QWidget):
                                             'Source name is {}'.format(self.source),
                                             buttons=QtWidgets.QMessageBox.Yes |
                                             QtWidgets.QMessageBox.No) == QtWidgets.QMessageBox.Yes:
-                del db[self.source]
-                QtWidgets.QMessageBox.information(self, 'Information',
-                                          '{} has been deleted'.format(self.source))
+                try:
+                    del db[self.source]
+                    QtWidgets.QMessageBox.information(self, 'Information',
+                                            '{} has been deleted'.format(self.source))
+                except AttributeError:
+                    QtWidgets.QMessageBox.information(self, 'Information',
+                                          'Problem with selected key')
 
 
 

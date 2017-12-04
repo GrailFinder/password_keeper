@@ -22,6 +22,8 @@ class SavePage(QtWidgets.QWidget):
             lab = QtWidgets.QLabel(field, self)  # smart
             ent = QtWidgets.QLineEdit(self)  # pretty
 
+            ent.resize(3000, 20)
+
             hbox = QtWidgets.QHBoxLayout()
             hbox.addWidget(lab)
             hbox.addWidget(ent)
@@ -33,10 +35,7 @@ class SavePage(QtWidgets.QWidget):
         button_layout = QtWidgets.QHBoxLayout()
         save_button = QtWidgets.QPushButton('Save', self)
         save_button.clicked.connect(self.save_function)
-        back_button = QtWidgets.QPushButton('Back', self)
-        back_button.clicked.connect(lambda: self.parent.setIndex(0))
         button_layout.addWidget(save_button)
-        button_layout.addWidget(back_button)
         vbox.addLayout(button_layout)
 
         
@@ -54,6 +53,11 @@ class SavePage(QtWidgets.QWidget):
                                           'Already have {}'.format(source),
                                           buttons=QtWidgets.QMessageBox.Close,
                                           defaultButton=QtWidgets.QMessageBox.Close)
+
+        elif source == '':
+            QtWidgets.QMessageBox.information(self, 'Information',
+                "empty source key is not allowed")
+
         else:
             record = dict()
             for field in fieldnames:
