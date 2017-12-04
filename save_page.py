@@ -22,7 +22,7 @@ class SavePage(QtWidgets.QWidget):
             lab = QtWidgets.QLabel(field, self)  # smart
             ent = QtWidgets.QLineEdit(self)  # pretty
 
-            ent.resize(3000, 20)
+            ent.setWidth(300)
 
             hbox = QtWidgets.QHBoxLayout()
             hbox.addWidget(lab)
